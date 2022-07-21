@@ -1,0 +1,21 @@
+{
+    "name": "hhz/sloth-php",
+    "description": "sloth php client sdk",
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "^7.4",
+        "php": ">=7.0.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Hhz\\Sloth\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "zhouyang",
+            "email": "zhouyang2021@163.com"
+        }
+    ]
+}
