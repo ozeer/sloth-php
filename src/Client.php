@@ -6,6 +6,7 @@ use Doraemon\pockets\config\IniConfig;
 use Doraemon\tools\Curl;
 use Doraemon\tools\Log;
 use Exception;
+use JsonException;
 
 /**
  * sloth延迟队列项目的php客户端请求封装类
@@ -34,14 +35,14 @@ class Client
 
 	/**
 	 * 写入任务队列id
-	 * @param $controller
-	 * @param $params
-	 * @param $queue_name
-	 * @param $client
-	 * @param $version
+	 * @param string $controller
+	 * @param array $params
+	 * @param string $queue_name
+	 * @param string $client
+	 * @param string $version
 	 * @return false|int
 	 */
-	public static function insertQueue($controller, $params, $queue_name, $client, $version)
+	public static function insertQueue(string $controller, array $params, string $queue_name, string $client, string $version)
 	{
 		try {
 			$task_id = self::genTaskId($params);
@@ -81,7 +82,7 @@ class Client
 	 * 生成任务唯一id
 	 * @param $params
 	 * @return int
-	 * @throws \JsonException
+	 * @throws JsonException
 	 */
 	public static function genTaskId($params): int
 	{
@@ -90,10 +91,10 @@ class Client
 
 	/**
 	 * 获取配置文件信息
-	 * @return mixed
+	 * @return string
 	 * @throws Exception
 	 */
-	private static function getConfig()
+	private static function getConfig(): string
 	{
 		return IniConfig::getConfigSelect('sloth_queue', 'api');
 	}
