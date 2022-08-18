@@ -1,0 +1,21 @@
+{
+  "name": "Sloth SDK for PHP",
+  "version": 0.1,
+  "server": {
+    "grpc": [
+      {
+        "ip": "sloth.gray.haohaozhu.me",
+        "port": "9999",
+        "weight": 100
+      }
+    ],
+    "http": [
+      {
+        "protocol": "http://",
+        "ip": "172.16.4.53",
+        "port": "8081",
+        "weight": 100
+      }
+    ]
+  }
+}

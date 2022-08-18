@@ -4,3 +4,4 @@
 composer.lock
 .phpunit.*
 *.log
+/sloth-php/

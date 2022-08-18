@@ -1,11 +1,13 @@
 {
     "name": "hhz/sloth-php",
     "description": "sloth php client sdk",
+    "keywords": ["sloth"],
     "type": "library",
     "require": {
-        "guzzlehttp/guzzle": "^7.4",
+        "monolog/monolog": "^1.25",
+        "php-curl-class/php-curl-class": "^9.1",
         "php": ">=7.4.0",
-      "ext-json": "*"
+        "ext-json": "*"
     },
     "license": "MIT",
     "autoload": {
