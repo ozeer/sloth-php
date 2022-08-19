@@ -117,7 +117,8 @@ class HttpClient
 			try {
 				$this->oCurl = new Curl();
 				// curl的配置
-				$this->oCurl->setHeader('Content-Type', 'application/json');
+				//$this->oCurl->setHeader('Content-Type', 'application/json');
+				$this->oCurl->setHeader('Content-Type', 'multipart/form-data');
 				//$this->oCurl->setDefaultJsonDecoder();
 				// sdk的配置
 				$oConfig = new Config();
