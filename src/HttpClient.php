@@ -67,21 +67,21 @@ class HttpClient
 			$aResp = $this->oCurl->post($url, $params);
 
 			// 调试
-			Log::info("延迟队列投递", [
+			Log::info("Add Task", [
 				'url' => $url,
 				'params' => $params,
 				'aResp' => $aResp
 			]);
 
-			if (!empty($aResp) && $aResp['code'] === 1) {
+			if (!empty($aResp) && $aResp->code === 0) {
 				return $task_id;
 			}
 
-			throw new \RuntimeException('延迟队列投递失败');
+			throw new \RuntimeException('Add task fail: '. $aResp->msg);
 		} catch (Exception $e) {
 			Log::error($queue_name . "#" . $controller, [
 				$params,
-				$e
+				$e->getMessage()
 			]);
 			return false;
 		}
