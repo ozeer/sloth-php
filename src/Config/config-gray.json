@@ -4,16 +4,16 @@
   "server": {
     "grpc": [
       {
-        "ip": "sloth.gray.haohaozhu.me",
-        "port": "9999",
+        "ip": "sloth.gray4.haohaozhu.me",
+        "port": "9288",
         "weight": 100
       }
     ],
     "http": [
       {
         "protocol": "http://",
-        "ip": "172.16.4.53",
-        "port": "8081",
+        "ip": "127.0.0.1",
+        "port": "9288",
         "weight": 100
       }
     ]

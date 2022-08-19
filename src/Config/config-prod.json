@@ -5,7 +5,7 @@
     "grpc": [
       {
         "ip": "sloth.haohaozhu.me",
-        "port": "9999",
+        "port": "9288",
         "weight": 100
       }
     ],
