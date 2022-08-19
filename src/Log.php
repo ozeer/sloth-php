@@ -17,7 +17,7 @@ use Monolog\Logger;
 class Log
 {
 	//const DEFAULT_LOG_PATH_PREFIX = "/data/logs_bak/";
-	public const DEFAULT_LOG_PATH_PREFIX = ".";
+	public const DEFAULT_LOG_PATH_PREFIX = "./"; // local test
 
 	public const DEFAULT_LOG_DIRECTORY = "sloth";
 
