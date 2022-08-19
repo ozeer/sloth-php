@@ -22,7 +22,7 @@ try {
 
 	$task_id = HttpClient::genTaskId($params);
 	echo "task_id: $task_id".PHP_EOL;
-} catch (JsonException $e) {
+} catch (Exception $e) {
 	Log::error("生成任务id失败", [$e->getMessage()]);
 }
 

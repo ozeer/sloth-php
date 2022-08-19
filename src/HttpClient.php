@@ -32,7 +32,6 @@ class HttpClient
 
 	// 队列名称
 	public const QUEUE_NAME = 'hzQDoraemon';
-	private $aMethod2ApiMap;
 	private string $sHostName;
 	/**
 	 * @var mixed
@@ -55,7 +54,7 @@ class HttpClient
 			$params['id'] = $task_id;
 			$params['body']['controller'] = $controller;
 			$params['body']['queue_name'] = $queue_name;
-			$params['body'] = json_encode($params['body'], JSON_UNESCAPED_SLASHES);
+			$params['body'] = json_encode($params['body'], JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES);
 
 			$url = $this->sHostName. '/v1/add_task';
 			$params['client'] = $client;
@@ -74,11 +73,11 @@ class HttpClient
 				'aResp' => $aResp
 			]);
 
-			if (!empty($aResp) && $aResp['code'] == 1) {
+			if (!empty($aResp) && $aResp['code'] === 1) {
 				return $task_id;
-			} else {
-				throw new Exception('延迟队列投递失败');
 			}
+
+			throw new \RuntimeException('延迟队列投递失败');
 		} catch (Exception $e) {
 			Log::error($queue_name . "#" . $controller, [
 				$params,
@@ -114,7 +113,7 @@ class HttpClient
 	 */
 	public function __construct()
 	{
-		if (null == $this->oCurl) {
+		if (null === $this->oCurl) {
 			try {
 				$this->oCurl = new Curl();
 				// curl的配置
@@ -125,10 +124,10 @@ class HttpClient
 				$this->aSdkConfig = $oConfig->parse();
 				// 执行初始化
 				if (!isset($this->aSdkConfig['server']['http'])) {
-					throw new \Exception("配置文件中没有发现服务器");
+					throw new \RuntimeException("配置文件中没有发现服务器");
 				}
 				if (!isset($this->aSdkConfig['server']['http'][0])) {
-					throw new \Exception("配置文件中没有发现服务器");
+					throw new \RuntimeException("配置文件中没有发现服务器");
 				}
 				$sProtocol = $this->aSdkConfig['server']['http'][0]['protocol'];
 				$sIp       = $this->aSdkConfig['server']['http'][0]['ip'];
@@ -142,7 +141,7 @@ class HttpClient
 					'err_code' => $e->getCode(),
 					'err_msg' => $e->getMessage()
 				]);
-				throw new \Exception($e->getMessage());
+				throw new \RuntimeException($e->getMessage());
 				exit;
 			}
 		}
@@ -160,12 +159,12 @@ class HttpClient
 			Log::error("#错误的方法名#", [
 				'sMethodName' => $sMethodName
 			]);
-			throw new \Exception("错误的方法名: " .$sMethodName);
+			throw new \RuntimeException("错误的方法名: " .$sMethodName);
 		}
 		if (!isset($aArguments[0])) {
 			// 此处记录日志，等待日志组件与日志统一标准格式
 			Log::error("#错误的参数#", $aArguments);
-			throw new \Exception("错误的参数: ".json_encode($aArguments));
+			throw new \RuntimeException("错误的参数: ".json_encode($aArguments));
 		}
 		$sApiPath = $this->sHostName.$this->aMethod2ApiMap[$sMethodName];
 		// 获取发起请求的json参数
@@ -198,6 +197,6 @@ class HttpClient
 			);
 		}
 		$oRet = $this->oCurl->response;
-		return json_decode(json_encode($oRet), true);
+		return json_decode(json_encode($oRet), true, 512, JSON_THROW_ON_ERROR);
 	}
 }

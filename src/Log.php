@@ -17,13 +17,14 @@ use Monolog\Logger;
 class Log
 {
 	//const DEFAULT_LOG_PATH_PREFIX = "/data/logs_bak/";
-	const DEFAULT_LOG_PATH_PREFIX = "./";
+	public const DEFAULT_LOG_PATH_PREFIX = ".";
 
-	const DEFAULT_LOG_DIRECTORY = "sloth";
+	public const DEFAULT_LOG_DIRECTORY = "sloth";
 
-	const DEFAULT_PROJECT_DIRECTORY_PREFIX = 'g_';
+	public const DEFAULT_PROJECT_DIRECTORY_PREFIX = 'g_';
 
-	const DEFAULT_LOG_SEPARATOR = '#';
+	public const DEFAULT_LOG_SEPARATOR = '#';
+
 	protected static array $levels = [
 		'debug' => Logger::DEBUG,
 		'info' => Logger::INFO,
@@ -203,18 +204,18 @@ class Log
 		self::setLogPath($backtrace);
 		$methodList = explode("_", strtolower($method));
 		if (count($methodList) > 1) {
-			if (count($methodList) == 2) {
+			if (count($methodList) === 2) {
 				self::addSystemLog($methodList[0], $methodList[1], $args);
 			} elseif (count($methodList) > 2) {
 				self::addSystemLog($methodList[0], $methodList[2], $args, $methodList[1]);
 			}
 		} else {
-			list ($logPath, $line) = self::getBackTrace($backtrace);
+			[$logPath, $line] = self::getBackTrace($backtrace);
 			self::addGeneralLog($logPath, $line, $method, $args);
 		}
 	}
 
-	private static function setLogPath($backtrace = null)
+	private static function setLogPath($backtrace = null): void
 	{
 		$sLogDirPrefix = self::DEFAULT_LOG_PATH_PREFIX;
 		// 一般服务器上都有/data/logs_bak文件夹，如果没有表示用户是在本地环境，将日志输出到/tmp目录下
@@ -225,7 +226,7 @@ class Log
 		if (isset($_SERVER['APP_NAME'])) {
 			self::$logSetting['logPath'] = $sLogDirPrefix . $_SERVER['APP_NAME'] . DIRECTORY_SEPARATOR;
 		} else {
-			$backtraceDir = ltrim(str_replace(dirname(dirname(__DIR__)), '', $backtrace[0]['file']), '/');
+			$backtraceDir = ltrim(str_replace(dirname(__DIR__, 2), '', $backtrace[0]['file']), '/');
 			$dirList = explode("/", $backtraceDir);
 			$logPath = str_replace(self::DEFAULT_PROJECT_DIRECTORY_PREFIX, '', array_shift($dirList));
 			self::$logSetting['logPath'] = $sLogDirPrefix . $logPath . DIRECTORY_SEPARATOR;
@@ -241,9 +242,13 @@ class Log
 		}
 		self::getSingleLog($logPath);
 		$realPath = self::$logSetting['logPath'] . self::$logSetting['logList'][$logTag]['dir'] . $logPath . self::getSlice();
-		if (!isset(self::$singleStreamHandlerPath[$logPath]) || self::$singleStreamHandlerPath[$logPath] != $realPath || !file_exists($realPath)) {
-			self::$singleStreamHandler[$logPath] = new StreamHandler($realPath,
-				self::$logSetting['logList'][$logTag]['logLevel'], true, 0666);
+		if (!isset(self::$singleStreamHandlerPath[$logPath]) || self::$singleStreamHandlerPath[$logPath] !== $realPath || !file_exists($realPath)) {
+			try {
+				self::$singleStreamHandler[$logPath] = new StreamHandler($realPath,
+					self::$logSetting['logList'][$logTag]['logLevel'], true, 0666);
+			} catch (\Exception $e) {
+				self::error("system_log_setting", self::$logSetting);
+			}
 			self::$singleStreamHandler[$logPath]->setFormatter(self::$singleFormatter[$logPath]);
 			//释放文件句柄
 			if (!empty(self::$singleLog[$logPath]->getHandlers())) {
@@ -277,12 +282,12 @@ class Log
 		return $logSuffix;
 	}
 
-	private static function writeLog($logPath, $logType, $logData)
+	private static function writeLog($logPath, $logType, $logData): void
 	{
 		$log = self::getSingleLog($logPath);
 		//$message = Ip::getClientIp() . self::DEFAULT_LOG_SEPARATOR . array_shift($logData);
 		$message = self::DEFAULT_LOG_SEPARATOR . array_shift($logData);
-		if (PHP_SAPI == "fpm-fcgi" && isset($_SERVER['HTTP_USER_AGENT'])) {
+		if (PHP_SAPI === "fpm-fcgi" && isset($_SERVER['HTTP_USER_AGENT'])) {
 			array_push($logData, $_SERVER['REQUEST_URI'], $_SERVER['HTTP_USER_AGENT']);
 		}
 		//$addFunction = 'add' . ucfirst($logType);
@@ -293,7 +298,7 @@ class Log
 	private static function getBackTrace($backtrace): array
 	{
 		$callFile = ltrim(str_replace(array(
-			dirname(dirname(__DIR__)),
+			dirname(__DIR__, 2),
 			'.php',
 			'/'
 		), array(
@@ -305,15 +310,16 @@ class Log
 		if (empty($callFile)) {
 			$callFile = 'general';
 		}
-		return array(
+		return [
 			$callFile,
 			$backtrace[0]['line']
-		);
+		];
 	}
 
-	private static function addGeneralLog($logPath, $line, $logType, $logData)
+	private static function addGeneralLog($logPath, $line, $logType, $logData): void
 	{
-		if (!isset(self::$singleFormatter[$logPath . "-" . $line])) {
+		$key = $logPath . "-" . $line;
+		if (!isset(self::$singleFormatter[$key])) {
 			$output = "%datetime%#line:{$line}#%level_name%#%message%#%context%\n";
 			self::$singleFormatter[$logPath . "-" . $line] = new LineFormatter($output);
 			if (isset(self::$singleStreamHandler[$logPath])) {
@@ -328,11 +334,15 @@ class Log
 		//var_dump($logPath);
 		//var_dump(self::getSlice());
 		//var_dump($realPath);
-		if (!isset(self::$singleStreamHandlerPath[$logPath]) || self::$singleStreamHandlerPath[$logPath] != $realPath || !file_exists($realPath)) {
-			self::$singleStreamHandler[$logPath] = new StreamHandler($realPath,
-				self::$logSetting['logList']['general']['logLevel'], true, 0666);
+		if (!isset(self::$singleStreamHandlerPath[$logPath]) || self::$singleStreamHandlerPath[$logPath] !== $realPath || !file_exists($realPath)) {
+			try {
+				self::$singleStreamHandler[$logPath] = new StreamHandler($realPath,
+					self::$logSetting['logList']['general']['logLevel'], true, 0666);
+			} catch (\Exception $e) {
+				self::error("general_log_setting", self::$logSetting);
+			}
 			self::$singleStreamHandler[$logPath]->setFormatter(self::$singleFormatter[$logPath . "-" . $line]);
-			//释放文件句柄
+			// 释放文件句柄
 			if (!empty(self::$singleLog[$logPath]->getHandlers())) {
 				self::$singleLog[$logPath]->popHandler()->close();
 			}
