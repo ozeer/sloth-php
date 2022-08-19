@@ -28,7 +28,7 @@ try {
 
 // 写队列
 $oClient = new HttpClient();
-$resp = $oClient->insertQueue('queue/delayqueue/test', [
+$resp = $oClient->AddTask('queue/delayqueue/test', [
 	'topic' => 'designer',
 	'delay' => 10,
 	'body' => [

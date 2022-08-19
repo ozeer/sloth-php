@@ -39,7 +39,7 @@ class HttpClient
 	private $aSdkConfig;
 
 	/**
-	 * 写入任务队列id
+	 * 添加延迟任务
 	 * @param string $controller
 	 * @param array $params
 	 * @param string $queue_name
@@ -47,7 +47,7 @@ class HttpClient
 	 * @param string $version
 	 * @return bool
 	 */
-	public function insertQueue(string $controller, array $params, string $queue_name, string $client, string $version): ?bool
+	public function AddTask(string $controller, array $params, string $queue_name, string $client, string $version): ?bool
 	{
 		try {
 			$task_id = self::genTaskId($params);
