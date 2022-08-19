@@ -73,10 +73,17 @@ class HttpClient
 				'aResp' => $aResp
 			]);
 
-			if (!empty($aResp) && $aResp->code === 0) {
+			// 服务未启动
+			if (empty($aResp)) {
+				return false;
+			}
+
+			// 成功
+			if ($aResp->code === 0) {
 				return true;
 			}
 
+			// 异常或者报错
 			throw new \RuntimeException('Add task fail: '. $aResp->msg);
 		} catch (Exception $e) {
 			Log::error($queue_name . "#" . $controller, [
