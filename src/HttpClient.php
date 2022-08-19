@@ -45,9 +45,9 @@ class HttpClient
 	 * @param string $queue_name
 	 * @param string $client
 	 * @param string $version
-	 * @return false|int
+	 * @return bool
 	 */
-	public function insertQueue(string $controller, array $params, string $queue_name, string $client, string $version)
+	public function insertQueue(string $controller, array $params, string $queue_name, string $client, string $version): ?bool
 	{
 		try {
 			$task_id = self::genTaskId($params);
@@ -74,7 +74,7 @@ class HttpClient
 			]);
 
 			if (!empty($aResp) && $aResp->code === 0) {
-				return $task_id;
+				return true;
 			}
 
 			throw new \RuntimeException('Add task fail: '. $aResp->msg);
