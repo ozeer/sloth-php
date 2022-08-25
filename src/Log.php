@@ -8,8 +8,7 @@ use Monolog\Logger;
 
 /**
  * Class Log
- * @method static statsign_info($title, $data = [])
- * @method static position_info($title, $data = [])
+ * @method static position_info($title, array $data = [])
  * @method static error(string $message, array $data)
  * @method static info(string $message, array $data)
  * @method static debug(string $message, array $data)
@@ -48,151 +47,8 @@ class Log
 				"dir" => "general/",
 				"logLevel" => Logger::DEBUG
 			],
-			'db' => [
-				"dir" => "db/",
-				"logLevel" => Logger::DEBUG
-			],
-			'sys' => [
-				"dir" => "sys/",
-				"logLevel" => Logger::DEBUG
-			],
-			'redis' => [
-				"dir" => "redis/",
-				"logLevel" => Logger::DEBUG
-			],
-			'curl' => [
-				"dir" => "curl/",
-				"logLevel" => Logger::DEBUG
-			],
-			'queue' => [
-				"dir" => "queue/",
-				"logLevel" => Logger::DEBUG
-			],
-			'api' => [
-				"dir" => "api/",
-				"logLevel" => Logger::DEBUG
-			],
-			'inner' => [
-				"dir" => "inner/",
-				"logLevel" => Logger::DEBUG
-			],
-			'amqp' => [
-				"dir" => "amqp/",
-				"logLevel" => Logger::DEBUG
-			],
-			'oss' => [
-				"dir" => "oss/",
-				"logLevel" => Logger::DEBUG
-			],
-			'order' => [
-				"dir" => "order/",
-				"logLevel" => Logger::DEBUG
-			],
-			'goods' => [
-				"dir" => "goods/",
-				"logLevel" => Logger::DEBUG
-			],
-			'pay' => [
-				"dir" => "pay/",
-				"logLevel" => Logger::DEBUG
-			],
-			'callback' => [
-				"dir" => "callback/",
-				"logLevel" => Logger::DEBUG
-			],
-			'settlement' => [
-				"dir" => "settlement/",
-				"logLevel" => Logger::DEBUG
-			],
-			'refund' => [
-				"dir" => "refund/",
-				"logLevel" => Logger::DEBUG
-			],
-			'cart' => [
-				"dir" => "cart/",
-				"logLevel" => Logger::DEBUG
-			],
-			'smallenergy' => [
-				"dir" => "smallenergy/",
-				"logLevel" => Logger::DEBUG
-			],
-			'point' => [
-				"dir" => "point/",
-				"logLevel" => Logger::DEBUG
-			],
-			'clearcache' => [
-				"dir" => "clearcache/",
-				"logLevel" => Logger::DEBUG
-			],
-			'coupon' => [
-				"dir" => "coupon/",
-				"logLevel" => Logger::DEBUG
-			],
-			'outcoupon' => [
-				"dir" => "outcoupon/",
-				"logLevel" => Logger::DEBUG
-			],
-			'groupbuy' => [
-				"dir" => "group_buy/",
-				"logLevel" => Logger::DEBUG
-			],
-			'event' => [
-				"dir" => "event/",
-				"logLevel" => Logger::DEBUG
-			],
-			'kafka' => [
-				"dir" => "kafka/",
-				"logLevel" => Logger::DEBUG
-			],
-			'erp' => [
-				"dir" => "erp/",
-				"logLevel" => Logger::DEBUG
-			],
-			'essync' => [
-				"dir" => "essync/",
-				"logLevel" => Logger::DEBUG
-			],
-			'delayedtask' => [
-				"dir" => "delayedtask/",
-				"logLevel" => Logger::DEBUG
-			],
-			'wiki' => [
-				"dir" => "wiki/",
-				"logLevel" => Logger::DEBUG
-			],
-			'designervote' => [
-				"dir" => "designervote/",
-				"logLevel" => Logger::DEBUG
-			],
 			'position' => [
 				"dir" => "position/",
-				"logLevel" => Logger::DEBUG
-			],
-			'statsign' => [
-				"dir" => "statsign/",
-			],
-			'video' => [
-				"dir" => "video/",
-				"logLevel" => Logger::DEBUG
-			],
-			'essearch' => [
-				"dir" => "essearch/",
-				"logLevel" => Logger::DEBUG
-			],
-			'funeng' => [
-				"dir" => "funeng/",
-				"logLevel" => Logger::DEBUG
-			],
-			'goword' => [
-				"dir" => "goword/",
-				"logLevel" => Logger::DEBUG
-			],
-			'im' => [
-				"dir" => "im/",
-				"logLevel" => Logger::DEBUG
-			],
-			'push' => [
-				"dir" => "push/",
 				"logLevel" => Logger::DEBUG
 			],
 		]
